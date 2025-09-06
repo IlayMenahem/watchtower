@@ -9,6 +9,45 @@ from math import ceil
 import matplotlib.pyplot as plt
 
 
+class DeltaCalculator:
+    def __init__(self, cmf: CMF, start: dict, constant: str, distance: int, variables: tuple):
+        self.cmf = cmf
+        self.start = start
+        self.constant = constant
+        self.distance = distance
+        self.variables = variables
+        self._cache = {}
+
+    def __call__(self, trajectory: tuple[int, ...]) -> float:
+        # Check cache first
+        if trajectory in self._cache:
+            return self._cache[trajectory]
+
+        gcd = np.gcd.reduce(trajectory)
+        if gcd == 0:
+            return -np.inf
+
+        trajectory_normalized = tuple(int(val / gcd) for val in trajectory)
+        trajectory_dict: dict = {var: val for var, val in zip(self.variables, trajectory_normalized)}
+
+        iterations = ceil(self.distance / sum(abs(val) for val in trajectory_normalized))
+
+        try:
+            result_const = self.cmf.limit(trajectory_dict, iterations, self.start).as_float()
+            delta = self.cmf.delta(trajectory_dict, iterations, self.start)
+        except ZeroDivisionError:
+            result = -np.inf
+        else:
+            if not db.identify([result_const, self.constant]):
+                result = -np.inf
+            else:
+                result = delta
+
+        # Cache the result
+        self._cache[trajectory] = result
+        return result
+
+
 def get_delta_func(cmf: CMF, start: dict, constant: str, distance: int, variables: tuple) -> callable:
     '''
     Returns a function that computes the delta for a given trajectory.
@@ -23,31 +62,7 @@ def get_delta_func(cmf: CMF, start: dict, constant: str, distance: int, variable
     Returns:
     callable: A function that takes a trajectory and returns the delta.
     '''
-
-    @lru_cache
-    def get_delta(trajectory: tuple[int, ...]) -> float:
-        gcd = np.gcd.reduce(trajectory)
-
-        if gcd == 0:
-            return -np.inf
-
-        trajectory = tuple(int(val / gcd) for val in trajectory)
-        trajectory_dict: dict = {var: val for var, val in zip(variables, trajectory)}
-
-        iterations = ceil(distance / sum(abs(val) for val in trajectory))
-
-        try:
-            result_const = cmf.limit(trajectory_dict, iterations, start).as_float()
-            delta = cmf.delta(trajectory_dict, iterations, start)
-        except ZeroDivisionError:
-            return -np.inf
-
-        if not db.identify([result_const, constant]):
-            return -np.inf
-
-        return delta
-
-    return get_delta
+    return DeltaCalculator(cmf, start, constant, distance, variables)
 
 
 def random_step(trajectory: tuple[int, ...]):
