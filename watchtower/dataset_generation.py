@@ -3,7 +3,7 @@ import multiprocessing
 import csv
 from ramanujantools.cmf.known_cmfs import pi
 import sympy as sp
-from utils import DeltaCalculator
+from watchtower.utils import DeltaCalculator
 from scipy import stats
 import numpy as np
 

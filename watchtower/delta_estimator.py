@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset, random_split
 from implementations.bc import train_model
-from utils import quantize, get_delta_func
+from watchtower.utils import quantize, get_delta_func
 import sympy as sp
 from ramanujantools.cmf.known_cmfs import pi
 import matplotlib.pyplot as plt

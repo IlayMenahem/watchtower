@@ -1,7 +1,7 @@
 from implementations.simulatedAnnealing import simulated_annealing
 from ramanujantools.cmf.known_cmfs import pi
 import sympy as sp
-from utils import random_step, get_delta_func, plot_search
+from watchtower.utils import random_step, get_delta_func, plot_search
 
 
 if __name__ == '__main__':

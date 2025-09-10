@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "watchtower"
+version = "0.1.0"
+description = "CMF delta estimation and search utilities"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "implementations @ git+https://github.com/IlayMenahem/implementations"
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/<your-username>/<your-repo>"
+Repository = "https://github.com/<your-username>/<your-repo>.git"
+Issues = "https://github.com/<your-username>/<your-repo>/issues"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["tests*", "docs*"]

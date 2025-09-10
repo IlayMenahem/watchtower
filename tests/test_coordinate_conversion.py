@@ -1,6 +1,6 @@
 import torch
 import math
-from delta_estimator import cartesian_to_spherical, spherical_to_cartesian
+from watchtower.delta_estimator import cartesian_to_spherical, spherical_to_cartesian
 
 
 def test_1d_coordinates():

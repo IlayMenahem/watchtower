@@ -1,7 +1,7 @@
 import gymnasium as gym
 from gymnasium.spaces import Discrete, Box, Tuple
 import numpy as np
-from utils import get_delta_func
+from watchtower.utils import get_delta_func
 
 
 class CMFEnv(gym.Env):
